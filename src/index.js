@@ -65,7 +65,6 @@ const randomToken = (length) => {
 };
 
 app.post('/login', (req, res) => {
-  // const { email, password } = req.body;
   const token = randomToken(16);
   return res.status(200).json({ token });
 });
