@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+// const randomToken = require('../utils/randomToken.js');
 
 const TALKERS_DATA_PATH = './talker.json';
 
@@ -49,4 +50,22 @@ app.get('/talker/:id', async (req, res) => {
   } catch (error) {
     console.error(`Erro na leitura do arquivo: ${error}`);
   }
+});
+
+// Requisito 3
+
+const randomToken = (length) => {
+  const range = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+  const newToken = [];  
+  for (let index = 0; index < length; index += 1) {
+      const currentChar = (Math.random() * (range.length - 1)).toFixed(0);
+      newToken[index] = range[currentChar];
+  }
+  return newToken.join('');
+};
+
+app.post('/login', (req, res) => {
+  // const { email, password } = req.body;
+  const token = randomToken(16);
+  return res.status(200).json({ token });
 });
