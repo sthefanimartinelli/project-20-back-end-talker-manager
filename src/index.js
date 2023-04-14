@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+
 const TALKERS_DATA_PATH = './talker.json';
 
 const filePath = path.resolve(__dirname, TALKERS_DATA_PATH);
@@ -25,7 +26,7 @@ app.get('/talker', async (req, res) => {
   try {
     const data = await fs.readFile(filePath);
     const talkers = JSON.parse(data);
-    if(talkers.length > 0) {
+    if (talkers.length > 0) {
       return res.status(200).json(talkers);
     }
     return res.status(200).json([]);
