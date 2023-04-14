@@ -34,3 +34,19 @@ app.get('/talker', async (req, res) => {
     console.error(`Erro na leitura do arquivo: ${error}`);
   }
 });
+
+// Requisito 2
+app.get('/talker/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await fs.readFile(filePath);
+    const talkers = JSON.parse(data);
+    const specificTalker = talkers.find((talker) => talker.id === Number(id));
+    if (specificTalker) {
+      return res.status(200).json(specificTalker);
+    } 
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } catch (error) {
+    console.error(`Erro na leitura do arquivo: ${error}`);
+  }
+});
