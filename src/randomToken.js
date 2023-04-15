@@ -10,4 +10,4 @@ const randomToken = (length) => {
   return newToken.join('');
 };
 
-module.exports = randomToken;
+module.exports = { randomToken };

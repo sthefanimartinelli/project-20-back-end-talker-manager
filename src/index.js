@@ -1,7 +1,8 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
-// const randomToken = require('../utils/randomToken.js');
+const { randomToken } = require('./randomToken');
+const { validateEmail, validatePassword } = require('./validations');
 
 const TALKERS_DATA_PATH = './talker.json';
 
@@ -52,19 +53,9 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-// Requisito 3
+// Requisito 3 e 4
 
-const randomToken = (length) => {
-  const range = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
-  const newToken = [];  
-  for (let index = 0; index < length; index += 1) {
-      const currentChar = (Math.random() * (range.length - 1)).toFixed(0);
-      newToken[index] = range[currentChar];
-  }
-  return newToken.join('');
-};
-
-app.post('/login', (req, res) => {
+app.post('/login', validateEmail, validatePassword, (req, res) => {
   const token = randomToken(16);
   return res.status(200).json({ token });
 });
