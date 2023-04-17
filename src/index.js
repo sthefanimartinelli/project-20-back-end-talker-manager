@@ -88,7 +88,7 @@ app.post('/talker', tokenValidation, nameValidation, ageValidation, talkValidati
 app.put('/talker/:id', tokenValidation, nameValidation, ageValidation, talkValidation,
   watchedAtValidation, rateValidation, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // Se eu transformar o id em Number lá embaixo dá problema e não passa nos testes. Porquê?
     const data = await fs.readFile(filePath, 'utf8');
     const talkers = JSON.parse(data);
     const talker = talkers.find((t) => t.id === Number(id));
@@ -100,7 +100,21 @@ app.put('/talker/:id', tokenValidation, nameValidation, ageValidation, talkValid
     const { name, age, talk } = req.body;
     talker.name = name; talker.age = age; talker.talk = talk;
     await fs.writeFile(filePath, JSON.stringify(talkers), 'utf8');
-    return res.status(200).json({ id: Number(id), name, age, talk });
+    return res.status(200).json({ id: Number(id), name, age, talk }); 
+  } catch (error) {
+    console.error(`Erro na leitura do arquivo: ${error}`);
+  }
+});
+
+// Requisito 7
+
+app.delete('/talker/:id', tokenValidation, async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const data = await fs.readFile(filePath, 'utf8');
+    const talkers = JSON.parse(data).filter((t) => t.id !== Number(id));
+    await fs.writeFile(filePath, JSON.stringify(talkers), 'utf8');
+    return res.status(204).end();
   } catch (error) {
     console.error(`Erro na leitura do arquivo: ${error}`);
   }

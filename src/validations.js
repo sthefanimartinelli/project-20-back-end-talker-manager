@@ -127,20 +127,6 @@ const rateValidation = (req, res, next) => {
   next();
 };
 
-// const idValidation = async (req, res, next) => {
-//   const { id } = Number(req.params);
-//   const data = await fs.readFile(filePath, 'utf8');
-//   const talkers = JSON.parse(data);
-//   const talker = talkers.find((t) => t.id === id);
-//   if (!talker) {
-//     return res.status(404).json({
-//       message: 'Pessoa palestrante não encontrada',
-//     });
-//   }
-  
-//   next();
-// };
-
 module.exports = { validateEmail,
 validatePassword,
 tokenValidation, 
