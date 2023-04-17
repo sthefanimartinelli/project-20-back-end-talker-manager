@@ -82,3 +82,26 @@ app.post('/talker', tokenValidation, nameValidation, ageValidation, talkValidati
     console.error(`Erro na leitura do arquivo: ${error}`);
   }
 });
+
+// Requisito 6
+
+app.put('/talker/:id', tokenValidation, nameValidation, ageValidation, talkValidation,
+  watchedAtValidation, rateValidation, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await fs.readFile(filePath, 'utf8');
+    const talkers = JSON.parse(data);
+    const talker = talkers.find((t) => t.id === Number(id));
+    if (!talker) {
+      return res.status(404).json({
+        message: 'Pessoa palestrante não encontrada',
+      });
+    }
+    const { name, age, talk } = req.body;
+    talker.name = name; talker.age = age; talker.talk = talk;
+    await fs.writeFile(filePath, JSON.stringify(talkers), 'utf8');
+    return res.status(200).json({ id: Number(id), name, age, talk });
+  } catch (error) {
+    console.error(`Erro na leitura do arquivo: ${error}`);
+  }
+});
