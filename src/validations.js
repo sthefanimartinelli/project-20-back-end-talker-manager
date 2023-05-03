@@ -127,6 +127,20 @@ const rateValidation = (req, res, next) => {
   next();
 };
 
+const rateValidationInSearch = (req, res, next) => {
+  const { rate } = req.query;
+  if (rate) {
+    const numberRate = Number(rate);
+    if (!Number.isInteger(numberRate) || numberRate <= 0 || numberRate > 5) {
+      return res.status(400).json({
+        message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
+      });
+    }
+  }
+  
+  next();
+};
+
 module.exports = { validateEmail,
 validatePassword,
 tokenValidation, 
@@ -134,4 +148,5 @@ nameValidation,
 ageValidation,
 talkValidation,
 watchedAtValidation,
-rateValidation };
+rateValidation,
+rateValidationInSearch };

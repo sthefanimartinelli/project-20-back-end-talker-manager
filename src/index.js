@@ -7,7 +7,8 @@ const { validateEmail, validatePassword, tokenValidation,
   ageValidation, 
   watchedAtValidation, 
   talkValidation, 
-  rateValidation } = require('./validations');
+  rateValidation, 
+  rateValidationInSearch } = require('./validations');
 
 const TALKERS_DATA_PATH = './talker.json';
 
@@ -28,11 +29,20 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-// Requisito 8
-app.get('/talker/search', tokenValidation, async (req, res) => {
+// Requisito 8 e 9
+app.get('/talker/search', tokenValidation, rateValidationInSearch, async (req, res) => {
   try {
-    const { q } = req.query;
+    const { q, rate } = req.query;
     const data = await fs.readFile(filePath, 'utf8');
+    if (q && rate) {
+      const talkers = JSON.parse(data).filter((talker) => talker.name.includes(q));
+      const talkersFiltered = talkers.filter((talker) => talker.talk.rate === Number(rate));
+      return res.status(200).json(talkersFiltered);
+    }
+    if (rate) {
+      const talkers = JSON.parse(data).filter((talker) => talker.talk.rate === Number(rate));
+      return res.status(200).json(talkers);
+    }
     const talkers = JSON.parse(data).filter((talker) => talker.name.includes(q));
     return res.status(200).json(talkers);
   } catch (error) {
