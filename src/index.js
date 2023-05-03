@@ -9,7 +9,8 @@ const { validateEmail, validatePassword, tokenValidation,
   talkValidation,
   rateValidation,
   rateValidationInSearch,
-  dateValidationInSearch } = require('./validations');
+  dateValidationInSearch, 
+  rateValidationForPatch } = require('./validations');
 
 const TALKERS_DATA_PATH = './talker.json';
 
@@ -137,6 +138,28 @@ app.delete('/talker/:id', tokenValidation, async (req, res) => {
     const { id } = req.params;
     const data = await fs.readFile(filePath, 'utf8');
     const talkers = JSON.parse(data).filter((t) => t.id !== Number(id));
+    await fs.writeFile(filePath, JSON.stringify(talkers), 'utf8');
+    return res.status(204).end();
+  } catch (error) {
+    console.error(`Erro na leitura do arquivo: ${error}`);
+  }
+});
+
+// Requisito 11
+
+app.patch('/talker/rate/:id', tokenValidation, rateValidationForPatch, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rate } = req.body;
+    const data = await fs.readFile(filePath, 'utf8');
+    const talkers = JSON.parse(data);
+    const talker = talkers.find((t) => t.id === Number(id));
+    if (!talker) {
+      return res.status(404).json({
+        message: 'Pessoa palestrante não encontrada',
+      });
+    }
+    talker.talk.rate = rate;
     await fs.writeFile(filePath, JSON.stringify(talkers), 'utf8');
     return res.status(204).end();
   } catch (error) {
