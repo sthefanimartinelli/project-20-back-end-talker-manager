@@ -39,7 +39,7 @@ app.listen(PORT, async () => {
   // console.log('Online');
 });
 
-// Requisito 12
+// Requisito 12 atualizado
 app.get('/talker/db', async (_req, res) => {
   const [result] = await connection.execute('SELECT * FROM TalkerDB.talkers');
   const organizedResult = result.map((talker) => (
