@@ -36,7 +36,7 @@ app.listen(PORT, async () => {
   if (result) {
     console.log('MySQL connection OK');
   }
-  // console.log('Online');
+  console.log('Online');
 });
 
 // Requisito 12 atualizado
