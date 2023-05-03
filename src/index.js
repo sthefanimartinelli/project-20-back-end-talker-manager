@@ -28,6 +28,18 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
+// Requisito 8
+app.get('/talker/search', tokenValidation, async (req, res) => {
+  try {
+    const { q } = req.query;
+    const data = await fs.readFile(filePath, 'utf8');
+    const talkers = JSON.parse(data).filter((talker) => talker.name.includes(q));
+    return res.status(200).json(talkers);
+  } catch (error) {
+    console.error(`Erro na leitura do arquivo: ${error}`);
+  }
+});
+
 // Requisito 1 
 app.get('/talker', async (req, res) => {
   try {
