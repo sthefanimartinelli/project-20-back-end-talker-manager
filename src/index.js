@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+const connection = require('./db/connection');
 const { randomToken } = require('./randomToken');
 const { validateEmail, validatePassword, tokenValidation,
   nameValidation,
@@ -9,7 +10,7 @@ const { validateEmail, validatePassword, tokenValidation,
   talkValidation,
   rateValidation,
   rateValidationInSearch,
-  dateValidationInSearch, 
+  dateValidationInSearch,
   rateValidationForPatch } = require('./validations');
 
 const TALKERS_DATA_PATH = './talker.json';
@@ -27,31 +28,51 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.listen(PORT, () => {
-  console.log('Online');
+app.listen(PORT, async () => {
+  console.log(`API talker_manager está sendo executada na porta ${PORT}`);
+
+  // O código abaixo é para testarmos a comunicação com o MySQL
+  const [result] = await connection.execute('SELECT 1');
+  if (result) {
+    console.log('MySQL connection OK');
+  }
+  // console.log('Online');
+});
+
+// Requisito 12
+app.get('/talker/db', async (_req, res) => {
+  const [result] = await connection.execute('SELECT * FROM TalkerDB.talkers');
+  const organizedResult = result.map((talker) => (
+    {
+      name: talker.name,
+      age: talker.age,
+      id: talker.id,
+      talk: { watchedAt: talker.talk_watched_at, rate: talker.talk_rate },
+    }));
+  return res.status(200).json(organizedResult);
 });
 
 // Requisito 8, 9 e 10
-app.get('/talker/search', tokenValidation, rateValidationInSearch, dateValidationInSearch, 
+app.get('/talker/search', tokenValidation, rateValidationInSearch, dateValidationInSearch,
   async (req, res) => {
-  try {
-    const { q, rate, date } = req.query;
-    const data = await fs.readFile(filePath, 'utf8');
-    let talkers = JSON.parse(data);
-    if (q) {
-      talkers = talkers.filter((talker) => talker.name.includes(q));
+    try {
+      const { q, rate, date } = req.query;
+      const data = await fs.readFile(filePath, 'utf8');
+      let talkers = JSON.parse(data);
+      if (q) {
+        talkers = talkers.filter((talker) => talker.name.includes(q));
+      }
+      if (rate) {
+        talkers = talkers.filter((talker) => talker.talk.rate === Number(rate));
+      }
+      if (date) {
+        talkers = talkers.filter((talker) => talker.talk.watchedAt === date);
+      }
+      return res.status(200).json(talkers);
+    } catch (error) {
+      console.error(`Erro na leitura do arquivo: ${error}`);
     }
-    if (rate) {
-      talkers = talkers.filter((talker) => talker.talk.rate === Number(rate));
-    }
-    if (date) {
-      talkers = talkers.filter((talker) => talker.talk.watchedAt === date);
-    }
-    return res.status(200).json(talkers);
-  } catch (error) {
-    console.error(`Erro na leitura do arquivo: ${error}`);
-  }
-});
+  });
 
 // Requisito 1 
 app.get('/talker', async (req, res) => {
