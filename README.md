@@ -8,7 +8,8 @@
 O código da API foi desenvolvido nos arquivos:
 - src/index.js
 - src/randomToken.js
-- src/validations.js 
+- src/validations.js
+
 Os demais arquivos foram desenvolvidos pela Trybe.
 
 ### Para iniciar o projeto:
