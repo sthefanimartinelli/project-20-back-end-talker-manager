@@ -6,9 +6,9 @@
 - Desenvolver endpoints que irão ler e escrever em um arquivo utilizando o módulo fs.
 
 O código da API foi desenvolvido nos arquivos:
-- index.js
-- randomToken.js
-- validations.js 
+- src/index.js
+- src/randomToken.js
+- src/validations.js 
 Os demais arquivos foram desenvolvidos pela Trybe.
 
 ### Para iniciar o projeto:
