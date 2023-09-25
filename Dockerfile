@@ -7,13 +7,14 @@ WORKDIR /app
 COPY package*.json ./ 
 RUN npm install
 
-# Copia testes do avaliador e arquivos do projeto
-COPY __tests__ ./__tests__
-COPY .eslint* seed.sql jest.config.js ./
+# Copia arquivos do projeto
+COPY .eslint* seed.sql
+
+RUN chown -R 1001:1001 /app
 
 # Usuário linux padrão do container, não é recomendado usar root
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
-USER node
+USER 1001
 
 # Substitui o comando padrão da imagem do node
 CMD [ "/bin/bash" ]

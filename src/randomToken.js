@@ -1,5 +1,7 @@
 // Código baseado em thread do StackOverflow: https://stackoverflow.com/questions/8532406/create-a-random-token-in-javascript-based-on-user-details
 
+// Requisito 3: Crie o endpoint POST /login
+
 const randomToken = (length) => {
   const range = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
   const newToken = [];  

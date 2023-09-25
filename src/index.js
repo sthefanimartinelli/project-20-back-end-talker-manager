@@ -3,7 +3,10 @@ const fs = require('fs').promises;
 const path = require('path');
 const connection = require('./db/connection');
 const { randomToken } = require('./randomToken');
-const { validateEmail, validatePassword, tokenValidation,
+const {
+  validateEmail,
+  validatePassword,
+  tokenValidation,
   nameValidation,
   ageValidation,
   watchedAtValidation,
@@ -11,7 +14,9 @@ const { validateEmail, validatePassword, tokenValidation,
   rateValidation,
   rateValidationInSearch,
   dateValidationInSearch,
-  rateValidationForPatch } = require('./validations');
+  rateValidationForPatch
+}
+  = require('./validations');
 
 const TALKERS_DATA_PATH = './talker.json';
 
@@ -39,7 +44,8 @@ app.listen(PORT, async () => {
   console.log('Online');
 });
 
-// Requisito 12 atualizado
+// Requisito 12: Crie o endpoint GET /talker/db
+
 app.get('/talker/db', async (_req, res) => {
   const [result] = await connection.execute('SELECT * FROM TalkerDB.talkers');
   const organizedResult = result.map((talker) => (
@@ -52,7 +58,10 @@ app.get('/talker/db', async (_req, res) => {
   return res.status(200).json(organizedResult);
 });
 
-// Requisito 8, 9 e 10
+// Requisito 8: Crie o endpoint GET /talker/search e o parâmetro de consulta q=searchTerm
+// Requisito 9: Crie no endpoint GET /talker/search o parâmetro de consulta rate=rateNumber
+// Requisito 10: Crie no endpoint GET /talker/search o parâmetro de consulta date=watchedDate
+
 app.get('/talker/search', tokenValidation, rateValidationInSearch, dateValidationInSearch,
   async (req, res) => {
     try {
@@ -74,7 +83,8 @@ app.get('/talker/search', tokenValidation, rateValidationInSearch, dateValidatio
     }
   });
 
-// Requisito 1 
+// Requisito 1: Crie o endpoint GET /talker
+
 app.get('/talker', async (req, res) => {
   try {
     const data = await fs.readFile(filePath);
@@ -88,7 +98,8 @@ app.get('/talker', async (req, res) => {
   }
 });
 
-// Requisito 2
+// Requisito 2: Crie o endpoint GET /talker/:id
+
 app.get('/talker/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -104,14 +115,15 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-// Requisito 3 e 4
+// Requisito 3: Crie o endpoint POST /login
+// Requisito 4: Adicione as validações para o endpoint /login
 
 app.post('/login', validateEmail, validatePassword, (req, res) => {
   const token = randomToken(16);
   return res.status(200).json({ token });
 });
 
-// Requisito 5
+// Requisito 5: Crie o endpoint POST /talker
 
 app.post('/talker', tokenValidation, nameValidation, ageValidation, talkValidation,
   watchedAtValidation, rateValidation, async (req, res) => {
@@ -129,12 +141,12 @@ app.post('/talker', tokenValidation, nameValidation, ageValidation, talkValidati
     }
   });
 
-// Requisito 6
+// Requisito 6: Crie o endpoint PUT /talker/:id
 
 app.put('/talker/:id', tokenValidation, nameValidation, ageValidation, talkValidation,
   watchedAtValidation, rateValidation, async (req, res) => {
     try {
-      const { id } = req.params; // Se eu transformar o id em Number lá embaixo dá problema e não passa nos testes. Porquê?
+      const { id } = req.params;
       const data = await fs.readFile(filePath, 'utf8');
       const talkers = JSON.parse(data);
       const talker = talkers.find((t) => t.id === Number(id));
@@ -152,7 +164,7 @@ app.put('/talker/:id', tokenValidation, nameValidation, ageValidation, talkValid
     }
   });
 
-// Requisito 7
+// Requisito 7: Crie o endpoint DELETE /talker/:id
 
 app.delete('/talker/:id', tokenValidation, async (req, res) => {
   try {
@@ -166,7 +178,7 @@ app.delete('/talker/:id', tokenValidation, async (req, res) => {
   }
 });
 
-// Requisito 11
+// Requisito 11: Crie o endpoint PATCH /talker/rate/:id
 
 app.patch('/talker/rate/:id', tokenValidation, rateValidationForPatch, async (req, res) => {
   try {

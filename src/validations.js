@@ -1,3 +1,5 @@
+// Requisito 4: Adicione as validações para o endpoint /login
+
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
 
@@ -17,6 +19,8 @@ const validateEmail = (req, res, next) => {
 
   next();
 };
+
+// Requisito 5: Crie o endpoint POST /talker
 
 const validatePassword = (req, res, next) => {
   const { password } = req.body;
@@ -110,6 +114,14 @@ const watchedAtValidation = (req, res, next) => {
   next();
 };
 
+const isRateValid = (res, rate) => {
+  if (!Number.isInteger(rate) || rate <= 0 || rate > 5) {
+    return res.status(400).json({
+      message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
+    });
+  }
+}
+
 const rateValidation = (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
@@ -118,28 +130,24 @@ const rateValidation = (req, res, next) => {
       message: 'O campo "rate" é obrigatório',
     });
   }
-  if (!Number.isInteger(rate) || rate <= 0 || rate > 5) {
-    return res.status(400).json({
-      message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
-    });
-  }
+  isRateValid(res, rate);
   
   next();
 };
+
+// Requisito 9: Crie no endpoint GET /talker/search o parâmetro de consulta rate=rateNumber
 
 const rateValidationInSearch = (req, res, next) => {
   const { rate } = req.query;
   if (rate) {
     const numberRate = Number(rate);
-    if (!Number.isInteger(numberRate) || numberRate <= 0 || numberRate > 5) {
-      return res.status(400).json({
-        message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
-      });
-    }
+    isRateValid(res, rate);
   }
   
   next();
 };
+
+// Requisito 10: Crie no endpoint GET /talker/search o parâmetro de consulta date=watchedDate
 
 const dateValidationInSearch = (req, res, next) => {
   const { date } = req.query; 
@@ -162,11 +170,7 @@ const rateValidationForPatch = (req, res, next) => {
       message: 'O campo "rate" é obrigatório',
     });
   }
-  if (!Number.isInteger(rate) || rate <= 0 || rate > 5) {
-    return res.status(400).json({
-      message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
-    });
-  }
+  isRateValid(res, rate);
   
   next();
 };
