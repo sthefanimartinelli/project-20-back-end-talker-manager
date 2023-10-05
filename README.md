@@ -1,35 +1,35 @@
+# :microphone: Project Talker Manager :microphone:
 
-# :microphone: Projeto Talker Manager :microphone:
+### Goals:
+- Develop an API CRUD for a set of speakers.
+- Develop endpoints that will read and write to a file using the fs module.
 
-### Objetivos:
-- Desenvolver uma API de um CRUD de palestrantes (talkers).
-- Desenvolver endpoints que irão ler e escrever em um arquivo utilizando o módulo fs.
+The API code was developed in the files:
+-src/index.js
+-src/randomToken.js
+-src/validações.js
 
-O código da API foi desenvolvido nos arquivos:
-- src/index.js
-- src/randomToken.js
-- src/validations.js
+The remaining files were developed by Trybe.
 
-Os demais arquivos foram desenvolvidos pela Trybe.
-
-### Para iniciar o projeto:
-- git clone git@github.com:sthefanimartinelli/project-20-back-end-talker-manager.git
-- docker compose up -d
-- docker exec -it talker_manager bash
-- npm run dev
-
-### Requisitos do projeto:
-| Requisito | Descrição |
+### To start the project:
+Clone the repository and run the commands below:
+```
+docker compose -d
+docker exec -it talker_manager bash
+npm run dev
+```
+### Project requirements:
+| Requirement | Description |
 |-----------|-----------|
-| 01 | Crie o endpoint GET /talker |
-| 02 | Crie o endpoint GET /talker/:id |
-| 03 | Crie o endpoint POST /login |
-| 04 | Adicione as validações para o endpoint /login |
-| 05 | Crie o endpoint POST /talker |
-| 06 | Crie o endpoint PUT /talker/:id |
-| 07 | Crie o endpoint DELETE /talker/:id |
-| 08 | Crie o endpoint GET `/talker/search` e o parâmetro de consulta `q=searchTerm` |
-| 09 | Crie no endpoint GET `/talker/search` o parâmetro de consulta `rate=rateNumber` |
-| 10 | Crie no endpoint GET `/talker/search` o parâmetro de consulta `date=watchedDate` |
-| 11 | Crie o endpoint PATCH `/talker/rate/:id` |
-| 12 | Crie o endpoint GET `/talker/db` |
+| 01 | Create the GET /talker |
+| 02 | Create the GET /talker/:id |
+| 03 | Create the POST /login |
+| 04 | Add validations for the /login |
+| 05 | Create the POST /talker |
+| 06 | Create the PUT endpoint /talker/:id |
+| 07 | Create the DELETE /talker/:id |
+| 08 | Create GET endpoint `/talker/search` and query parameter `q=searchTerm` |
+| 09 | Create the query parameter `rate=rateNumber` in the GET endpoint `/talker/search` |
+| 10 | Create the query parameter `date=watchedDate` in the GET endpoint `/talker/search` |
+| 11 | Create the PATCH endpoint `/talker/rate/:id` |
+| 12 | Create the GET endpoint `/talker/db` |
