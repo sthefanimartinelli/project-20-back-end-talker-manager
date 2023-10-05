@@ -1,4 +1,4 @@
-# :microphone: Project Talker Manager :microphone:
+# :microphone: Talker Manager Project :microphone:
 
 ### Goals:
 - Develop an API CRUD for a set of speakers.
